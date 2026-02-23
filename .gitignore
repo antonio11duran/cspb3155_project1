@@ -1,0 +1,14 @@
+# build artifacts
+target
+project
+build
+**/.ipynb_checkpoints
+.idea
+
+# tooling state
+.bsp
+.bloop
+.metals
+
+# up to you; usually i ignore this
+.vscode
