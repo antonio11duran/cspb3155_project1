@@ -48,15 +48,20 @@ object StackMachineEmulator {
             // case SinI => 
             // case CosI => 
             // // exception if stack is empty and requires two pops. Recursive call should be able to join under the one poppers
-            stack match
-                  case head :: tail => {
-                        val v1 = head
-                        case LoadI(s) => {(tail, env(s) = v1)}
-                        tail match
-                              case head :: tail => {
-                                    case AddI => ((v1 + head) :: stack, env)
-                              }
+            case LoadI(s) => {
+                  stack match {
+                        case head :: next => (next, env + (s -> head))
+                        case _ => throw new IllegalArgumentException(s"No environment variable $s")
+                  }
+            }
 
+            case AddI => {
+                  stack match {
+                        case v1 :: v2 :: tail => ((v1 + v2) :: tail, env)
+                        case _ => throw new IllegalArgumentException("Not enough stack elements for AddI")
+                  }
+                  
+            }
             // case SubI => 
             // case MultI => 
             // case DivI => 
@@ -78,6 +83,12 @@ object StackMachineEmulator {
     def emulateStackMachine(instructionList: List[StackMachineInstruction]): Map[String, Double] =
         {
             //TODO: Your Code here.
-              ???
+            val stack = List.empty[Double]
+            val env = Map.empty[String, Double]
+            val finalStateEnv = instructionList.foldLeft((stack, env)) {
+                  case ((stack, env), instruction) =>
+                        emulateSingleInstruction(stack, env, instruction)
+            }
+            finalStateEnv._2
         }
 }
