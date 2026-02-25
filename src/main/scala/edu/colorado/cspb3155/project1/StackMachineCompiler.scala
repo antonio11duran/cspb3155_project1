@@ -10,7 +10,6 @@ object StackMachineCompiler {
     The type of Expr is in the file Expr.scala in this directory.
 */
 def compileToStackMachineCode(e: Expr): List[StackMachineInstruction] = {
-    //TODO: Your code here
     e match {
         case Const(f) => List(PushI(f))
         case Ident(id) => List(StoreI(id))
